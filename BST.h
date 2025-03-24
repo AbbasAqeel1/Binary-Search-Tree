@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <exception>
+#include <queue>
 using namespace std;
 
 template <class T>
@@ -26,6 +28,10 @@ class BST
 			Node<T>* newnode = new Node<T>(Value);
 			root = newnode;
 			return root;
+		}
+		else if (root->value == Value)
+		{
+			throw exception("Value already exists!");
 		}
 		else if (Value < root->value)
 		{
@@ -96,6 +102,26 @@ public:
 	BST()
 	{
 		Root = NULL;
+	}
+	~BST()
+	{
+
+		queue<Node<T>*> NodesToDelete;
+		NodesToDelete.push(Root);
+
+		while (!NodesToDelete.empty())
+		{
+			Node<T>* Temp = NodesToDelete.front();
+			NodesToDelete.pop();
+
+			if (Temp->Left)
+				NodesToDelete.push(Temp->Left);
+			if (Temp->Right)
+				NodesToDelete.push(Temp->Right);
+
+			delete Temp;
+		}
+	
 	}
 
 	void Add(T Value)
